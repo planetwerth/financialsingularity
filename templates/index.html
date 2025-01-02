@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Financial Singularity</title>
+</head>
+<body>
+    <h1>Welcome to Financial Singularity</h1>
+
+    <h2>Current Blockchain:</h2>
+    <pre id="blockchain-data"></pre>
+
+    <h2>Add New Block</h2>
+    <form id="block-form">
+        <input type="text" id="block-data" placeholder="Enter data for new block">
+        <button type="submit">Add Block</button>
+    </form>
+
+    <script>
+        // Fetch current blockchain data
+        fetch('/blockchain')
+            .then(response => response.json())
+            .then(data => document.getElementById('blockchain-data').textContent = JSON.stringify(data, null, 2));
+
+        // Handle new block form submission
+        document.getElementById('block-form').onsubmit = function(event) {
+            event.preventDefault();
+
+            const blockData = document.getElementById('block-data').value;
+
+            fetch('/new_block', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ data: blockData })
+            })
+            .then(response => response.json())
+            .then(newBlock => {
+                console.log('New Block:', newBlock);
+                alert('New block added!');
+            });
+        };
+    </script>
+</body>
+</html>
